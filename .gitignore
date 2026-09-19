@@ -1,0 +1,11 @@
+node_modules/
+/coverage/
+/dist/
+.npm/
+
+npm-debug.log*
+*.lcov
+
+.DS_Store
+.AppleDouble
+.LSOverride

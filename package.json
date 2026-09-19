@@ -1,0 +1,77 @@
+{
+  "name": "sigurd",
+  "version": "0.1.0",
+  "description": "A lightweight React state management library based on signals.",
+  "author": "Leonardo Raele <leonardoraele@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/leonardoraele/sigurd#readme",
+  "bugs": {
+    "url": "https://github.com/leonardoraele/sigurd/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonardoraele/sigurd.git"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "imports": {
+    "#src/*": "./src/*",
+    "#package.js": "./package.json"
+  },
+  "scripts": {
+    "test": "run-s test:types test:unit",
+    "test:types": "tsc --noEmit",
+    "test:unit": "vitest run src",
+    "build": "tsc",
+    "prebuild": "rimraf dist",
+    "prepack": "run-s test build"
+  },
+  "dependencies": {
+    "@leonardoraele/signals": "^0.12.0"
+  },
+  "peerDependencies": {
+    "react": "^19.3.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "global-jsdom": "^30.0.0",
+    "jsdom": "^30.1.0",
+    "npm-run-all": "^4.1.5",
+    "react": "^19.3.0",
+    "rimraf": "^6.1.3",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
+  },
+  "keywords": [
+    "react",
+    "state",
+    "management",
+    "state-management",
+    "signal",
+    "signals",
+    "lightweight",
+    "data",
+    "sigurd",
+    "redux",
+    "zustand",
+    "preact",
+    "signia",
+    "mobx",
+    "valtio",
+    "signalium",
+    "legend-state"
+  ]
+}
