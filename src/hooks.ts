@@ -1,154 +1,177 @@
 import { useEffect, useMemo, useState } from 'react';
-import { SignalEffect, SignalController, type SignalPrimitive } from
-	'@leonardoraele/signals';
+import { SignalEffect, SignalController, type SignalPrimitive } from '@leonardoraele/signals';
 
 /**
- * This hook is a signal-based counterpart to react's `useEffect`. It behaves just like it, but it also automatically
- * adds any signal used within the effect as a dependency automatically.
+ * React-friendly wrapper around {@link SignalEffect}.
+ *
+ * This hook mirrors React's `useEffect`, but automatically tracks every Sigurd signal read while the callback runs.
+ * When any of those signals changes, the effect is scheduled to rerun in a microtask.
  *
  * @remarks
  *
- * Creates an effect with the lifecycle bound to the component. The effect runs when the component mounts, similar to
- * `useEffect`, and runs asynchronously whenever a dependant signal changes. The effect is disposed when the component
- * unmounts.
+ * - The effect is created lazily and first evaluated after the component commits.
+ * - Signal dependencies are discovered dynamically from values read inside `callbackfn`.
+ * - Explicit `deps` are still honored, so you can mix React dependencies and signal dependencies when needed.
+ * - The underlying {@link SignalEffect} is disposed automatically when the component unmounts.
  *
- * This hook also accepts an array of explicit dependencies, just like `useEffect`. If one of the dependencies changes
- * after a rerender, the effect is re-evaluated. This way, the effect can depend on signals and explicit dependencies
- * simultaneously.
+ * @param callbackfn - Effect callback that can read signals and perform side effects.
+ * @param deps - Optional React-style dependency list that recreates the effect when its values change.
  */
 export function useSignalEffect(callbackfn: () => void, deps: unknown[] = []): void {
-	const effect = useMemo(() => new SignalEffect(callbackfn, { lazy: true }), deps);
-	useEffect(() => {
-		effect.events.addEventListener('dirty', () => queueMicrotask(() => effect.reevaluate()));
-		return () => effect.dispose();
-	}, [effect]);
-	useEffect(() => void effect.reevaluate());
+  const effect = useMemo(() => new SignalEffect(callbackfn, { lazy: true }), deps);
+
+  useEffect(() => {
+    effect.events.addEventListener('dirty', () => queueMicrotask(() => effect.reevaluate()));
+    return () => effect.dispose();
+  }, [effect]);
+
+  useEffect(() => void effect.reevaluate(), [effect]);
 }
 
 /**
- * This hook tracks signals used during the component's render phase, and rerenders the component if any of those
- * signals change later. It returns a disposable proxy-like wrapper of the store, which **MUST** be assigned to a
- * `using` variable in the component body.
+ * Wraps a store so reads during render subscribe the component to every signal it touches.
+ *
+ * The returned object behaves like the original store, but includes a disposable token that tears down the render-time
+ * observation scope. In components, the wrapper **must** be assigned to a `using` variable so disposal happens at the
+ * end of the render lifecycle.
  *
  * @remarks
  *
- * This hook works just like `useSignalObserverToken()`, but instead of returning a token, it wraps the provided object
- * into a disposable proxy-like object that behaves just like the token when it disposes. It is intended to be used
- * inside of your stores' hook functions to ensure that the disposable token is properly managed; so that you don't need
- * to manually call `useSignalObserverToken()` in every component.
+ * This helper is intended for store hooks such as `useCounterStore()`. By returning a wrapper instead of the token
+ * directly, the hook can stay ergonomic while still enforcing correct signal tracking.
  *
- * Note that you cannot simply call `useSignalObserverToken()` inside of your store's hook functions because the token
- * must be assigned to a `using` variable in the component's body.
+ * The wrapper uses the original store as its prototype, so writes land on the wrapper object rather than the original
+ * store. For that reason the API exposes the wrapped store as `Readonly<T>`; mutable state should live inside signal
+ * objects instead of plain writable properties.
  *
- * Because this method returns a new object with the original as prototype, then writes to it will be stored on the new
- * object, leaving the original object unchanged. This is why the function returns a `Readonly` version of the store.
- * This is fine because the store's mutable properties must all be readonly SignalState types anyway.
+ * @param store - Store object whose signal reads should be tracked for the current component render.
+ * @returns A disposable readonly wrapper over `store`, or the original nullish value.
  */
 export function useSignalStore<T extends object>(store: T): Readonly<T> & Disposable;
 export function useSignalStore<T extends object>(store: T | null): Readonly<T> & Disposable | null;
 export function useSignalStore<T extends object>(store: T | undefined): Readonly<T> & Disposable | undefined;
-export function useSignalStore<T extends object>(store: T | null | undefined):
-	Readonly<T> & Disposable | null | undefined;
-export function useSignalStore<T extends object>(store: T | null | undefined):
-	Readonly<T> & Disposable | null | undefined
-{
-	// Must call this hook even if the store is null or undefined, because of react hook rules.
-	const token = useSignalObserverToken();
-	if (!store) {
-		token[Symbol.dispose]();
-		return store;
-	}
-	return Object.create(store, {
-		[Symbol.dispose]: {
-			configurable: true,
-			enumerable: false,
-			value() {
-				token[Symbol.dispose]();
-				super[Symbol.dispose]?.();
-			},
-			writable: true,
-		}
-	});
+export function useSignalStore<T extends object>(store: T | null | undefined): Readonly<T> & Disposable | null | undefined;
+export function useSignalStore<T extends object>(store: T | null | undefined): Readonly<T> & Disposable | null | undefined {
+  const token = useSignalObserverToken();
+
+  if (!store) {
+    token[Symbol.dispose]();
+    return store;
+  }
+
+  return Object.create(store, {
+    [Symbol.dispose]: {
+      configurable: true,
+      enumerable: false,
+      value() {
+        token[Symbol.dispose]();
+        super[Symbol.dispose]?.();
+      },
+      writable: true,
+    },
+  });
 }
 
-
+/**
+ * Mutable counterpart to {@link useSignalStore}.
+ *
+ * Use this variant when your store intentionally exposes writable plain properties in addition to signals and you need
+ * writes to target the original store object. The returned proxy still carries a disposable token and therefore also
+ * **must** be assigned to a `using` variable inside the component body.
+ *
+ * @remarks
+ *
+ * Prefer {@link useSignalStore} unless you specifically need mutation of non-signal properties. The readonly variant is
+ * simpler and avoids the semantic overhead of a proxy.
+ *
+ * @param store - Store object whose signal reads should be tracked for the current component render.
+ * @returns A disposable proxy for `store`, or the original nullish value.
+ */
 export function useMutableSignalStore<T extends object>(store: T): T & Disposable;
 export function useMutableSignalStore<T extends object>(store: T | null): T & Disposable | null;
 export function useMutableSignalStore<T extends object>(store: T | undefined): T & Disposable | undefined;
 export function useMutableSignalStore<T extends object>(store: T | null | undefined): T & Disposable | null | undefined;
-export function useMutableSignalStore<T extends object>(store: T | null | undefined): T & Disposable | null | undefined
-{
-	const token = useSignalObserverToken();
-	if (!store) {
-		token[Symbol.dispose]();
-		return store;
-	}
+export function useMutableSignalStore<T extends object>(store: T | null | undefined): T & Disposable | null | undefined {
+  const token = useSignalObserverToken();
 
-	function dispose(this: T, ...args: any[]) {
-		token[Symbol.dispose]();
-		(store as any)[Symbol.dispose]?.apply(this, args);
-	}
+  if (!store) {
+    token[Symbol.dispose]();
+    return store;
+  }
 
-	return new Proxy<T>(store, {
-		get(target, p, receiver) {
-			if (p === Symbol.dispose) {
-				return dispose;
-			}
-			return Reflect.get(target, p, receiver);
-		},
-	}) as T & Disposable;
+  function dispose(this: T, ...args: any[]) {
+    token[Symbol.dispose]();
+    (store as any)[Symbol.dispose]?.apply(this, args);
+  }
+
+  return new Proxy<T>(store, {
+    get(target, p, receiver) {
+      if (p === Symbol.dispose) {
+        return dispose;
+      }
+
+      return Reflect.get(target, p, receiver);
+    },
+  }) as T & Disposable;
 }
 
 /**
- * This hook tracks signals used during the component's render phase, and rerenders the component if any of those
- * signals change later.
+ * Starts a render-scoped signal observation session for the current component.
  *
- * Note that the returned token is a disposable object. It **MUST** be assigned to a `using` variable in the body of the
- * component to prevent memory leaks and errors caused when signals change after the component unmounts.
+ * Any signal read after this hook runs becomes associated with the returned token. When one of those signals changes,
+ * the component rerenders once and the token aborts the current observation session.
  *
- * @param signal
+ * @remarks
+ *
+ * The token is a disposable resource. Components **must** assign it to a `using` variable in the component body so the
+ * observation scope is always cleaned up, even when the component unmounts before a tracked signal changes.
+ *
+ * Store hooks normally wrap this primitive through {@link useSignalStore} or {@link useMutableSignalStore}. Reach for it
+ * directly only when you need render tracking without wrapping another object.
+ *
+ * @returns Disposable token that cleans up the observation scope when disposed.
  */
-export function useSignalObserverToken(): DisposableToken {
-	function useManualRerender() {
-		const [, setState] = useState(false);
-		return () => setState(s => !s);
-	}
+export function useSignalObserverToken(): Disposable {
+  function useManualRerender() {
+    const [, setState] = useState(false);
+    return () => setState((state: boolean) => !state);
+  }
 
-	const rerender = useManualRerender();
-	const aborter = new AbortController();
+  const rerender = useManualRerender();
+  const aborter = new AbortController();
 
-	useEffect(() => {
-		return () => {
-			if (!aborter.signal.aborted) {
-				aborter.abort();
-			}
-		};
-	});
+  useEffect(() => {
+    return () => {
+      if (!aborter.signal.aborted) {
+        aborter.abort();
+      }
+    };
+  });
 
-	function onSignalUsed(primitive: SignalPrimitive) {
-		primitive.addEventListener('change', () => {
-			rerender();
-			aborter.abort();
-		}, { signal: aborter.signal });
-	}
+  function onSignalUsed(primitive: SignalPrimitive) {
+    primitive.addEventListener('change', () => {
+      rerender();
+      aborter.abort();
+    }, { signal: aborter.signal });
+  }
 
-	SignalController.pushScope();
-	SignalController.observe(onSignalUsed);
+  SignalController.pushScope();
+  SignalController.observe(onSignalUsed);
 
-	function onDispose() {
-		SignalController.unobserve(onSignalUsed);
-		SignalController.popScope();
-	}
+  function onDispose() {
+    SignalController.unobserve(onSignalUsed);
+    SignalController.popScope();
+  }
 
-	return new DisposableToken(onDispose);
+  return new DisposableToken(onDispose);
 }
 
 class DisposableToken {
-	public constructor(
-		private readonly callback: () => void,
-	) {}
+  public constructor(
+    private readonly callback: () => void,
+  ) {}
 
-	public [Symbol.dispose](): void {
-		this.callback();
-	}
+  public [Symbol.dispose](): void {
+    this.callback();
+  }
 }

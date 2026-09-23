@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/typedoc-plugin-markdown/typedoc-plugin-markdown.schema.json",
+  "name": "Sigurd API Reference",
+  "plugin": [
+    "typedoc-plugin-markdown"
+  ],
+  "entryPoints": [
+    "./typedoc/sigurd.ts"
+  ],
+  "tsconfig": "./tsconfig.typedoc.json",
+  "out": "./docs/api/reference",
+  "readme": "none",
+  "router": "kind-dir",
+  "entryFileName": "index.md",
+  "hideBreadcrumbs": true,
+  "hidePageHeader": true,
+  "cleanOutputDir": true,
+  "externalSymbolLinkMappings": {
+    "typescript": {
+      "AbortSignal": "https://developer.mozilla.org/docs/Web/API/AbortSignal"
+    }
+  },
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "navigation": {
+    "includeCategories": false,
+    "includeGroups": false,
+    "includeFolders": false
+  }
+}
