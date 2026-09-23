@@ -2,7 +2,7 @@
 
 > **useSignalObserverToken**(): `Disposable`
 
-Defined in: src/hooks.ts:134
+Defined in: src/hooks.ts:135
 
 Starts a render-scoped signal observation session for the current component.
 

@@ -2,7 +2,7 @@
 
 > **useSignalEffect**(`callbackfn`, `deps?`): `void`
 
-Defined in: src/hooks.ts:20
+Defined in: src/hooks.ts:21
 
 React-friendly wrapper around [SignalEffect](../../classes/SignalEffect/index.md).
 

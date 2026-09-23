@@ -1,6 +1,15 @@
-export default {
-	test: {
-		globals: true,
-		environment: 'jsdom',
-	},
-};
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'node',
+    globals: true,
+    server: {
+      deps: {
+        inline: ['@leonardoraele/signals'],
+      },
+    },
+  },
+});

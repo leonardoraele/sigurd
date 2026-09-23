@@ -4,7 +4,7 @@
 
 > **useMutableSignalStore**\<`T`\>(`store`): `T` & `Disposable`
 
-Defined in: src/hooks.ts:90
+Defined in: src/hooks.ts:91
 
 Mutable counterpart to [useSignalStore](../useSignalStore/index.md).
 
@@ -41,7 +41,7 @@ simpler and avoids the semantic overhead of a proxy.
 
 > **useMutableSignalStore**\<`T`\>(`store`): `T` & `Disposable` \| `null`
 
-Defined in: src/hooks.ts:91
+Defined in: src/hooks.ts:92
 
 Mutable counterpart to [useSignalStore](../useSignalStore/index.md).
 
@@ -78,7 +78,7 @@ simpler and avoids the semantic overhead of a proxy.
 
 > **useMutableSignalStore**\<`T`\>(`store`): `T` & `Disposable` \| `undefined`
 
-Defined in: src/hooks.ts:92
+Defined in: src/hooks.ts:93
 
 Mutable counterpart to [useSignalStore](../useSignalStore/index.md).
 
@@ -115,7 +115,7 @@ simpler and avoids the semantic overhead of a proxy.
 
 > **useMutableSignalStore**\<`T`\>(`store`): `T` & `Disposable` \| `null` \| `undefined`
 
-Defined in: src/hooks.ts:93
+Defined in: src/hooks.ts:94
 
 Mutable counterpart to [useSignalStore](../useSignalStore/index.md).
 

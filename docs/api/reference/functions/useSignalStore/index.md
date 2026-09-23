@@ -4,7 +4,7 @@
 
 > **useSignalStore**\<`T`\>(`store`): `Readonly`\<`T`\> & `Disposable`
 
-Defined in: src/hooks.ts:50
+Defined in: src/hooks.ts:51
 
 Wraps a store so reads during render subscribe the component to every signal it touches.
 
@@ -45,7 +45,7 @@ objects instead of plain writable properties.
 
 > **useSignalStore**\<`T`\>(`store`): `Readonly`\<`T`\> & `Disposable` \| `null`
 
-Defined in: src/hooks.ts:51
+Defined in: src/hooks.ts:52
 
 Wraps a store so reads during render subscribe the component to every signal it touches.
 
@@ -86,7 +86,7 @@ objects instead of plain writable properties.
 
 > **useSignalStore**\<`T`\>(`store`): `Readonly`\<`T`\> & `Disposable` \| `undefined`
 
-Defined in: src/hooks.ts:52
+Defined in: src/hooks.ts:53
 
 Wraps a store so reads during render subscribe the component to every signal it touches.
 
@@ -127,7 +127,7 @@ objects instead of plain writable properties.
 
 > **useSignalStore**\<`T`\>(`store`): `Readonly`\<`T`\> & `Disposable` \| `null` \| `undefined`
 
-Defined in: src/hooks.ts:53
+Defined in: src/hooks.ts:54
 
 Wraps a store so reads during render subscribe the component to every signal it touches.
 

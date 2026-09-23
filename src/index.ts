@@ -1,3 +1,4 @@
+import './map-get-or-insert.js';
 /**
  * Sigurd couples React-facing store hooks with first-party signal primitives.
  *
