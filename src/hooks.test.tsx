@@ -1,6 +1,5 @@
-import 'global-jsdom/register';
 import { describe, expect, it } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { useMutableSignalStore, useSignalEffect, useSignalObserverToken, useSignalStore } from './hooks.js';
 import type { ReactNode } from 'react';
 import * as React from 'react';
@@ -25,13 +24,13 @@ describe(PACKAGE.name, () => {
 
 			expect(effectRunCount).toBe(1);
 
-			signal.value++;
+			act(() => signal.value++);
 
 			expect(effectRunCount).toBe(1);
 
 			await waitFor(() => expect(effectRunCount).toBe(2));
 
-			signal.value++;
+			act(() => signal.value++);
 
 			expect(effectRunCount).toBe(2);
 
@@ -55,12 +54,12 @@ describe(PACKAGE.name, () => {
 			expect(getByTestId('value').textContent).toBe('0');
 			expect(renderCount).toBe(1);
 
-			signal.value++;
+			act(() => signal.value++);
 
 			await waitFor(() => expect(getByTestId('value').textContent).toBe('1'));
 			expect(renderCount).toBe(2);
 
-			signal.value++;
+			act(() => signal.value++);
 
 			await waitFor(() => expect(getByTestId('value').textContent).toBe('2'));
 			expect(renderCount).toBe(3);
@@ -85,12 +84,12 @@ describe(PACKAGE.name, () => {
 			expect(getByTestId('value').textContent).toBe('0');
 			expect(renderCount).toBe(1);
 
-			store.data.value++;
+			act(() => store.data.value++);
 
 			await waitFor(() => expect(getByTestId('value').textContent).toBe('1'));
 			expect(renderCount).toBe(2);
 
-			store.data.value++;
+			act(() => store.data.value++);
 
 			await waitFor(() => expect(getByTestId('value').textContent).toBe('2'));
 			expect(renderCount).toBe(3);
@@ -115,12 +114,12 @@ describe(PACKAGE.name, () => {
 			expect(getByTestId('value').textContent).toBe('0');
 			expect(renderCount).toBe(1);
 
-			store.data.value++;
+			act(() => store.data.value++);
 
 			await waitFor(() => expect(getByTestId('value').textContent).toBe('1'));
 			expect(renderCount).toBe(2);
 
-			store.data.value++;
+			act(() => store.data.value++);
 
 			await waitFor(() => expect(getByTestId('value').textContent).toBe('2'));
 			expect(renderCount).toBe(3);
