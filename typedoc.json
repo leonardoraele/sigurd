@@ -7,7 +7,6 @@
 	"tsconfig": "./tsconfig.typedoc.json",
 	"out": "./docs/public/api",
 	"cleanOutputDir": true,
-	"skipErrorChecking": true,
 	"excludeExternals": true,
 	"highlightLanguages": [
 		"bash",
