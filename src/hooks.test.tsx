@@ -3,7 +3,7 @@ import { act, render, waitFor } from '@testing-library/react';
 import { useMutableSignalStore, useSignalEffect, useSignalObserverToken, useSignalStore, withSigurd } from './hooks.js';
 import type { ReactNode } from 'react';
 import * as React from 'react';
-import PACKAGE from '#package.js';
+import PACKAGE from '#package.json' with { type: 'json' };
 import { SignalState } from '@leonardoraele/signals';
 
 describe(PACKAGE.name, () => {
