@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, FunctionComponent } from 'react';
 import { SignalEffect, SignalController, type SignalPrimitive } from
 	'@leonardoraele/signals';
 
@@ -151,4 +151,13 @@ class DisposableToken {
 	public [Symbol.dispose](): void {
 		this.callback();
 	}
+}
+
+export function withSigurd<T = {}>(component: FunctionComponent<T>) {
+	function WithSignalsWrapper(props: T) {
+		using _token = useSignalObserverToken();
+		return component(props);
+	};
+	WithSignalsWrapper.displayName = component.displayName ?? component.name;
+	return WithSignalsWrapper;
 }

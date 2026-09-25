@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { act, render, waitFor } from '@testing-library/react';
-import { useMutableSignalStore, useSignalEffect, useSignalObserverToken, useSignalStore } from './hooks.js';
+import { useMutableSignalStore, useSignalEffect, useSignalObserverToken, useSignalStore, withSigurd } from './hooks.js';
 import type { ReactNode } from 'react';
 import * as React from 'react';
 import PACKAGE from '#package.js';
@@ -120,6 +120,34 @@ describe(PACKAGE.name, () => {
 			expect(renderCount).toBe(2);
 
 			act(() => store.data.value++);
+
+			await waitFor(() => expect(getByTestId('value').textContent).toBe('2'));
+			expect(renderCount).toBe(3);
+		});
+	});
+
+	describe(withSigurd.name, () => {
+		it('wraps a component and tracks signals', async () => {
+			const signal = new SignalState(0);
+			let renderCount = 0;
+
+			function TestComponent(): ReactNode {
+				renderCount += 1;
+				return <span data-testid="value">{signal.value}</span>;
+			}
+
+			const WrappedComponent = withSigurd(TestComponent);
+			const { getByTestId } = render(<WrappedComponent />);
+
+			expect(getByTestId('value').textContent).toBe('0');
+			expect(renderCount).toBe(1);
+
+			act(() => signal.value++);
+
+			await waitFor(() => expect(getByTestId('value').textContent).toBe('1'));
+			expect(renderCount).toBe(2);
+
+			act(() => signal.value++);
 
 			await waitFor(() => expect(getByTestId('value').textContent).toBe('2'));
 			expect(renderCount).toBe(3);
