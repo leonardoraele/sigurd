@@ -33,7 +33,7 @@
     "build": "tsc",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:api": "npm exec --yes --package=typedoc@0.28.20 --package=typescript@5.9.3 -- typedoc --options typedoc.json",
+    "docs:api": "npm exec --yes --package=typedoc@0.28.20 -- typedoc --options typedoc.json",
     "docs": "run-s docs:api docs:build",
     "prebuild": "rimraf dist",
     "prepack": "run-s test build"
