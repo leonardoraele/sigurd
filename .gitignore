@@ -1,6 +1,9 @@
 node_modules/
 /coverage/
 /dist/
+/docs/.vitepress/dist/
+/docs/.vitepress/cache/
+/docs/public/api/
 .npm/
 
 npm-debug.log*

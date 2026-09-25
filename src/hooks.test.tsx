@@ -1,9 +1,7 @@
-import 'global-jsdom/register';
 import { describe, expect, it } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
 import { useMutableSignalStore, useSignalEffect, useSignalObserverToken, useSignalStore } from './hooks.js';
 import type { ReactNode } from 'react';
-import * as React from 'react';
 import PACKAGE from '#package.js';
 import { SignalState } from '@leonardoraele/signals';
 

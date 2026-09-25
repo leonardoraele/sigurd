@@ -106,12 +106,11 @@ export function useMutableSignalStore<T extends object>(store: T | null | undefi
  * Note that the returned token is a disposable object. It **MUST** be assigned to a `using` variable in the body of the
  * component to prevent memory leaks and errors caused when signals change after the component unmounts.
  *
- * @param signal
  */
-export function useSignalObserverToken(): DisposableToken {
+export function useSignalObserverToken(): Disposable {
 	function useManualRerender() {
 		const [, setState] = useState(false);
-		return () => setState(s => !s);
+		return () => setState((s: boolean) => !s);
 	}
 
 	const rerender = useManualRerender();

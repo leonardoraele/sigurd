@@ -64,7 +64,35 @@ And that's it! Sigurd will detect any signal used inside the component's body an
 
 ## API Reference
 
-TBD (for now, refer to the `*.d.ts` and `*.test.ts` files)
+Generate the API reference locally with `npm run docs:api`, or build the full documentation site with `npm run docs`.
+
+## Documentation
+
+The local documentation toolchain uses VitePress for the site and TypeDoc for API generation.
+
+```bash
+npm run docs:dev
+```
+
+Starts the local VitePress dev server from the `docs/` directory.
+
+```bash
+npm run docs:api
+```
+
+Generates the API reference into the docs site's static assets.
+
+```bash
+npm run docs:build
+```
+
+Builds the VitePress site.
+
+```bash
+npm run docs
+```
+
+Runs a full local docs build by generating the API reference first and then building the site.
 
 ## License
 
