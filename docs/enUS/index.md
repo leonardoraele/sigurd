@@ -9,12 +9,12 @@ hero:
   actions:
     - theme: brand
       text: Getting Started
-      link: ./guides/getting-started
+      link: ./guides
     - theme: alt
       text: API Reference
-      link: ./api
+      link: /api
     - theme: alt
-      text: GitHub
+      text: ⭐ Star on GitHub
       link: https://github.com/leonardoraele/sigurd
 
 # features:

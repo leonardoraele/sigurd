@@ -21,22 +21,21 @@ export default defineConfig({
 			themeConfig: {
 				nav: [
 					{ text: 'Guides', link: '/enUS/guides', activeMatch: '^/enUS/guides/' },
-					{ text: 'API Reference', link: '/enUS/api', activeMatch: '^/enUS/api/' },
-					{ text: 'Examples', link: '/enUS/examples', activeMatch: '^/enUS/examples/' },
+					{ text: 'API Reference', link: '/api', activeMatch: '^/api/' },
+					// { text: 'Examples', link: '/enUS/examples', activeMatch: '^/enUS/examples/' },
 					{ text: 'GitHub', link: HITHUB_URL },
 				],
 				sidebar: {
 					'/enUS/guides/': [
-						{ text: 'Getting Started', link: '/enUS/guides/getting-started' },
-						{ text: 'Comparison', link: '/enUS/guides/comparison' }
+						{ text: 'Introduction', items: [
+							{ text: 'Getting Started', link: '/enUS/guides/getting-started' },
+							{ text: 'Comparison', link: '/enUS/guides/comparison' },
+						] },
 					],
-					'/enUS/api/': [
-						{ text: 'useSignalStore', link: '/enUS/api/use-signal-store' }
-					],
-					'/enUS/examples/': [
-						{ text: 'Example 1', link: '/enUS/examples/example-1' },
-						{ text: 'Example 2', link: '/enUS/examples/example-2' }
-					],
+					// '/enUS/examples/': [
+					// 	{ text: 'Example 1', link: '/enUS/examples/example-1' },
+					// 	{ text: 'Example 2', link: '/enUS/examples/example-2' }
+					// ],
 				},
 
 				footer: {
