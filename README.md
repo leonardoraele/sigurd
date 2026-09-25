@@ -62,9 +62,9 @@ export function CounterComponent() {
 
 And that's it! Sigurd will detect any signal used inside the component's body and track it. Then, whenever any of those signals change, the component will be automatically re-rendered.
 
-## Documentation Plan
+## Documentation
 
-The initial documentation site structure, navigation model, and README-to-site content mapping are defined in [docs/information-architecture.md](./docs/information-architecture.md).
+For the planned documentation site architecture and content boundaries, see [DOCS-PLAN.md](./DOCS-PLAN.md).
 
 ## API Reference
 
