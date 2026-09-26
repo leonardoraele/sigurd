@@ -7,13 +7,9 @@ export const BASE_PATH = '/sigurd';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-	title: PACKAGE.name,
+	title: PACKAGE.name.toUpperCase(),
 	description: "React state management with signals.",
 	base: BASE_PATH,
-
-	rewrites: {
-		[`${BASE_PATH}/:path*`]: `${BASE_PATH}/enUS/:path*`
-	},
 
 	locales: {
 		enUS: {
@@ -30,8 +26,8 @@ export default defineConfig({
 				sidebar: {
 					'/enUS/guides/': [
 						{ text: 'Introduction', items: [
-							{ text: 'Getting Started', link: `${BASE_PATH}/enUS/guides/getting-started` },
-							{ text: 'Comparison', link: `${BASE_PATH}/enUS/guides/comparison` },
+							{ text: 'Getting Started', link: '/enUS/guides/getting-started' },
+							{ text: 'Comparison', link: '/enUS/guides/comparison' },
 						] },
 					],
 					// [`${BASE_PATH}/enUS/examples/`]: [

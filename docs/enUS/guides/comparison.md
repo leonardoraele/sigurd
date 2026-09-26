@@ -28,6 +28,8 @@ Signia and Sigurd are very similar. One of the major differences is that Signia 
 
 What Sigurd offers that Signia lacks are reactive data structures, which allow for more fine-grained reactivity when working with collections.
 
+<!-- TODO Signia also requires to install a Vite plugin. It is possible that Signia only reacts within JSX statements. Also Sigurd works with any bundler. -->
+
 - ✅ **Reactive Data Structures.** Sigurd offers `ReactiveArray`, `ReactiveSet`, and `ReactiveMap`, which react to changes in their contents. `Signia` requires the signals to be reassigned with a new immutable data object every time it changes in order to trigger updates.
 
 ## Sigurd vs MobX
