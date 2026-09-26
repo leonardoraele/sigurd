@@ -28,7 +28,7 @@ export default defineConfig({
 					{ text: 'GitHub', link: HITHUB_URL },
 				],
 				sidebar: {
-					[`${BASE_PATH}/enUS/guides/`]: [
+					'/enUS/guides/': [
 						{ text: 'Introduction', items: [
 							{ text: 'Getting Started', link: `${BASE_PATH}/enUS/guides/getting-started` },
 							{ text: 'Comparison', link: `${BASE_PATH}/enUS/guides/comparison` },
