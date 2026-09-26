@@ -1,3 +1,3 @@
 <script setup>
-window.location.href = `/enUS`;
+window.location.href = `./enUS`;
 </script>

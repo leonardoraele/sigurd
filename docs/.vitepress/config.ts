@@ -3,14 +3,16 @@ import PACKAGE from '#package.json' with { type: 'json' };
 
 export const HITHUB_URL = 'https://github.com/leonardoraele/sigurd';
 export const DEFAULT_LOCALE = 'enUS';
+export const BASE_PATH = '/sigurd';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
 	title: PACKAGE.name,
 	description: "React state management with signals.",
+	base: BASE_PATH,
 
 	rewrites: {
-		'/:path*': '/enUS/:path*'
+		[`${BASE_PATH}/:path*`]: `${BASE_PATH}/enUS/:path*`
 	},
 
 	locales: {
@@ -20,24 +22,23 @@ export default defineConfig({
 			description: 'React state management with signals.',
 			themeConfig: {
 				nav: [
-					{ text: 'Guides', link: '/enUS/guides', activeMatch: '^/enUS/guides/' },
-					{ text: 'API Reference', link: '/api', activeMatch: '^/api/' },
-					// { text: 'Examples', link: '/enUS/examples', activeMatch: '^/enUS/examples/' },
+					{ text: 'Guides', link: '/enUS/guides', activeMatch: '.*/enUS/guides/.*' },
+					{ text: 'API Reference', link: '/api', activeMatch: '.*/api/.*' },
+					// { text: 'Examples', link: '/enUS/examples', activeMatch: '.*/enUS/examples/.*' },
 					{ text: 'GitHub', link: HITHUB_URL },
 				],
 				sidebar: {
-					'/enUS/guides/': [
+					[`${BASE_PATH}/enUS/guides/`]: [
 						{ text: 'Introduction', items: [
-							{ text: 'Getting Started', link: '/enUS/guides/getting-started' },
-							{ text: 'Comparison', link: '/enUS/guides/comparison' },
+							{ text: 'Getting Started', link: `${BASE_PATH}/enUS/guides/getting-started` },
+							{ text: 'Comparison', link: `${BASE_PATH}/enUS/guides/comparison` },
 						] },
 					],
-					// '/enUS/examples/': [
-					// 	{ text: 'Example 1', link: '/enUS/examples/example-1' },
-					// 	{ text: 'Example 2', link: '/enUS/examples/example-2' }
+					// [`${BASE_PATH}/enUS/examples/`]: [
+					// 	{ text: 'Example 1', link: `${BASE_PATH}/enUS/examples/example-1` },
+					// 	{ text: 'Example 2', link: `${BASE_PATH}/enUS/examples/example-2` }
 					// ],
 				},
-
 				footer: {
 					message: "Released under the MIT License.",
 					copyright: "Copyright © 2026 Leonardo Raele",
