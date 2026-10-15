@@ -58,5 +58,7 @@ export function withSigurd<PropsType>(Component: FunctionComponent<PropsType>): 
 		}
 	}
 
-	return Object.defineProperty(SigurdWrapper, 'name', { value: Component.name, configurable: true });
+	SigurdWrapper.displayName = `Sigurd(${Component.displayName || Component.name})`;
+
+	return SigurdWrapper;
 }
