@@ -43,4 +43,5 @@ Compared to MobX, Sigurd is slightly more transparent with state management, sin
 - Valtio
 - Signalium
 - Legend-State
+- Jotai
 -->
