@@ -1,0 +1,11 @@
+{
+	"name": "Sigurd Devtools",
+	"description": "Devtools for sigurd",
+	"version": "0.1.0",
+	"manifest_version": 3,
+	"action": {
+		"default_popup": "popup/index.html",
+		"default_icon": "images/icon.png"
+	},
+	"devtools_page": "devtools/index.html"
+}
