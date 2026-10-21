@@ -24,14 +24,17 @@ export class StoreInfo {
 		public readonly id: string,
 		public readonly description: string,
 	) {
-		this.initSignals();
+		this.refresh();
 	}
 
-	public readonly sources = new Set<SignalSourceEntry>();
-	public readonly sinks = new Set<SignalSinkEntry>();
+	public readonly sources = new Map<unknown, SignalSourceEntry>();
+	public readonly sinks = new Map<unknown, SignalSinkEntry>();
 
-	private initSignals() {
-		searchPropertiesDeep<typeof this.store>(
+	public refresh() {
+		this.sources.clear();
+		this.sinks.clear();
+
+		const it = searchPropertiesDeep<typeof this.store>(
 			this.store,
 			({ path, value, enter, skip }) => {
 				if (typeof value !== 'object' || value === null) {
@@ -43,14 +46,14 @@ export class StoreInfo {
 					|| value instanceof ReactiveSet
 					|| value instanceof ReactiveArray
 				) {
-					this.sources.add({ source: value, path: pathStr });
+					this.sources.set(value, { source: value, path: pathStr });
 				} else if (value instanceof SignalEffect) {
-					this.sinks.add({ sink: value, path: pathStr });
+					this.sinks.set(value, { sink: value, path: pathStr });
 				} else if (value instanceof SignalComputed) {
-					this.sources.add({ source: value, path: pathStr });
-					this.sinks.add({ sink: value, path: pathStr });
+					this.sources.set(value, { source: value, path: pathStr });
+					this.sinks.set(value, { sink: value, path: pathStr });
 				} else if (isReactiveProxy(value)) {
-					this.sources.add({ source: value, path: pathStr });
+					this.sources.set(value, { source: value, path: pathStr });
 				} else if (GlobalStoreRegistry.hasStore(value)) {
 					skip();
 				} else {
@@ -59,13 +62,11 @@ export class StoreInfo {
 			},
 			{
 				inherited: true,
-				nonEnumerables: true,
 				symbols: true,
 			},
-		).toArray();
-	}
+		);
 
-	public refresh() {
-		this.initSignals();
+		// Consume the iterator
+		while (!it.next().done) {}
 	}
 }

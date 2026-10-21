@@ -17,7 +17,9 @@ export class StoreRegistry {
 		// registration. Deferring registration is not an issue because it is mainly for debug purposes.
 		setTimeout(() => {
 			const id = StoreRegistry.generateId();
-			description ||= store instanceof Object ? store.constructor.name : `<store-${id}>`;
+			description ||= store instanceof Object && Object.getPrototypeOf(store) !== Object.prototype
+				? `${store.constructor.name} (${id})`
+				: `<store-${id}>`;
 			const info = new StoreInfo(store, id, description);
 			this._stores.set(store, info);
 		}, 0);
